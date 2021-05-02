@@ -1,18 +1,20 @@
 ﻿using System;
-
+using System.Threading;
 namespace BeCarFast
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
-        
+           
+            
           
             Boolean win = false;
 
             //sterowanie
-       
-            
+           
+
             String player1 = "$$";
             String player2 = "??";
             String currentPlayer;
@@ -21,6 +23,24 @@ namespace BeCarFast
             Random r = new Random();
                
             String trap = "*";
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Game is starting!!!");
+                Thread.Sleep(2000);
+                Console.Clear();
+                Thread.Sleep(1000);
+            }
+
+            for (int i = 3; i > 0 ; i--)
+            {
+                Console.WriteLine(i);
+                Thread.Sleep(2000);
+                Console.Clear();
+                Thread.Sleep(1000);
+            }
+
+
             Console.WriteLine("Hello in game 'BeCarFast ' hehe");
             Console.WriteLine("Try to reach top square edge first"+"Type map levels");
             int userMapLengthInput = Convert.ToInt32(Console.ReadLine());
@@ -44,9 +64,7 @@ namespace BeCarFast
                 
                
                 currentPlayer = player1;
-
-
-
+          
 
 
 
@@ -108,7 +126,7 @@ namespace BeCarFast
                 }
 
                 Console.WriteLine("Current player: " + currentPlayer);
-
+                Console.Clear();
                 displayUserArr(finalUserOutMap, userMapLengthInput);
                 Console.WriteLine("");
                 ConsoleKeyInfo userMove1 = Console.ReadKey(true);
@@ -152,7 +170,7 @@ namespace BeCarFast
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
                     }
-                    
+                    Console.Clear();
                     displayUserArr(finalUserOutMap, userMapLengthInput);
                     currentPlayer = player1;
                     break;
