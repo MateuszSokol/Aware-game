@@ -5,55 +5,98 @@ namespace BeCarFast
     class Program
     {
         
-        static void Main(string[] args)
+        static void Main()
         {
+                     
+            bool win = false;
+
+            string[] herosArr = { " ^ ", " $ ", " @ ", " & ", " + " };
+
+            string player1;
+            string player2;
+            string currentPlayer = "";
+            const string winningTotem = "< >";
+            const string mapSymbol = "[ ]";
+            Random r = new Random();
+            const string trap = " * ";
+
            
             
-          
-            Boolean win = false;
 
-            //sterowanie
-           
+            Console.WriteLine("Welcome in game 'BeCareFast ' ");
 
-            String player1 = "$$";
-            String player2 = "??";
-            String currentPlayer;
-            String winningTotem = "<>";
-            String mapSymbol = "[]";
-            Random r = new Random();
-               
-            String trap = "*";
 
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine("Game is starting!!!");
+
+            Console.WriteLine("Try to reach top middle square  first"+"\n" +"Type map size");
+
+            
+            
+
+
+                int userMapLengthInput = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Your map size: " + userMapLengthInput + "x" + userMapLengthInput);
+                Console.WriteLine("click arrow buttons to move");
                 Thread.Sleep(2000);
                 Console.Clear();
-                Thread.Sleep(1000);
-            }
 
-            for (int i = 3; i > 0 ; i--)
-            {
-                Console.WriteLine(i);
+                //P1 wybiera postac
+                Console.WriteLine("Pick your Hero, P1");
+
+                for (int i = 0; i < herosArr.Length; i++)
+                {
+
+                    Console.WriteLine(i + 1 + ": " + herosArr[i]);
+                }
+
+
+                Console.WriteLine("type numbers 1-5");
+
+                int P1PickingHeroNumber = Convert.ToInt32(Console.ReadLine());
+
+                player1 = herosArr[P1PickingHeroNumber - 1];
+                herosArr[P1PickingHeroNumber - 1] = null;
+
+                //P2 wybiera postac
+
+                Console.WriteLine("P1: " + player1 + "\n" + "P2 choosing: ");
+
+                for (int i = 0; i < herosArr.Length; i++)
+                {
+                    if (herosArr[i] != null)
+                    {
+
+                        Console.WriteLine(i + 1 + ": " + herosArr[i]);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+
+                }
+
+                Console.WriteLine("type numbers 1-5");
+                int P2PickingHeroNumber = Convert.ToInt32(Console.ReadLine());
+                player2 = herosArr[P2PickingHeroNumber - 1];
+                Console.WriteLine("P2: " + player2);
+
+
                 Thread.Sleep(2000);
                 Console.Clear();
-                Thread.Sleep(1000);
-            }
 
-
-            Console.WriteLine("Hello in game 'BeCarFast ' hehe");
-            Console.WriteLine("Try to reach top square edge first"+"Type map levels");
-            int userMapLengthInput = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("click arrow buttos to move in");
-            String[,] finalUserOutMap = new String[userMapLengthInput, userMapLengthInput];
-            String[,] tempArray = new string[userMapLengthInput, userMapLengthInput];
-            fillMap(finalUserOutMap, userMapLengthInput); //fill with []
-           fillTemporaryMap(tempArray, userMapLengthInput); //zwraca tablice z []
-            fillArrWithBombs(userMapLengthInput,tempArray, trap);
-            addWinningTotemP1AndP2(finalUserOutMap,winningTotem,userMapLengthInput,player1,player2); //dodaje graczy oraz wygrywajacy totem
-            displayUserArr(finalUserOutMap, userMapLengthInput); //wyswietla plansze uzytkownika
-
+                currentPlayer = Draw(r, currentPlayer, player1, player2);
+                string[,] finalUserOutMap = new string[userMapLengthInput, userMapLengthInput];
+                string[,] tempArray = new string[userMapLengthInput, userMapLengthInput];
+                FillMap(finalUserOutMap, userMapLengthInput); //fill with []
+                FillMapWithBombs(userMapLengthInput, tempArray, trap);
+                AddWinningTotemP1P2(finalUserOutMap, winningTotem, userMapLengthInput, player1, player2); //dodaje graczy oraz wygrywajacy totem
+                DisplayUserMap(finalUserOutMap, userMapLengthInput); //wyswietla plansze uzytkownika
+            Console.WriteLine(currentPlayer);
+            
+            
+                
+            
 
 
             // 2621440 downArrow
@@ -61,14 +104,9 @@ namespace BeCarFast
             // 2555904 rightArrow
 
             //2490368 upArrow
-                
-               
-                currentPlayer = player1;
+
+            
           
-
-
-
-
             while (!win)
             {
 
@@ -77,7 +115,7 @@ namespace BeCarFast
                 while (currentPlayer == player1)
                 {
 
-                    if(winCheck(finalUserOutMap, win, winningTotem, player1, player2, userMapLengthInput))
+                    if(WinCheck(finalUserOutMap, win, winningTotem, player1, player2, userMapLengthInput))
                     {
                         win = true;
                         break;
@@ -87,9 +125,9 @@ namespace BeCarFast
                     ConsoleKeyInfo userMove = Console.ReadKey(true);
                     if (userMove.GetHashCode().Equals(2490368))  //tura gracza nr 1
                     {
-                        player1GoUp(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
+                        Plauer1GoUp(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
 
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
 
@@ -98,8 +136,8 @@ namespace BeCarFast
                     }
                     else if (userMove.GetHashCode().Equals(2621440))
                     {
-                        player1GoDown(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        Player1GoDown(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
 
@@ -107,7 +145,7 @@ namespace BeCarFast
                     else if (userMove.GetHashCode().Equals(2424832))
                     {
                         player1GoLeft(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
                     }
@@ -115,7 +153,7 @@ namespace BeCarFast
                     else if (userMove.GetHashCode().Equals(2555904))
                     {
                         player1GoRight(userMapLengthInput, finalUserOutMap, player1, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
 
@@ -125,9 +163,9 @@ namespace BeCarFast
                     break;
                 }
 
-                Console.WriteLine("Current player: " + currentPlayer);
-                Console.Clear();
-                displayUserArr(finalUserOutMap, userMapLengthInput);
+                Console.WriteLine("Current Player: " + currentPlayer);
+                
+                DisplayUserMap(finalUserOutMap, userMapLengthInput);
                 Console.WriteLine("");
                 ConsoleKeyInfo userMove1 = Console.ReadKey(true);
 
@@ -142,7 +180,7 @@ namespace BeCarFast
                     {
                         player2GoUp(userMapLengthInput, finalUserOutMap, mapSymbol, player2);
 
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
 
@@ -151,14 +189,14 @@ namespace BeCarFast
                     else if (userMove1.GetHashCode().Equals(2621440))
                     {
                         player2GoDown(userMapLengthInput, finalUserOutMap, player2, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
                     }
                     else if (userMove1.GetHashCode().Equals(2424832))
                     {
                         player2GoLeft(userMapLengthInput, finalUserOutMap, player2, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
                     }
@@ -166,12 +204,12 @@ namespace BeCarFast
                     else if (userMove1.GetHashCode().Equals(2555904))
                     {
                         player2GoRight(userMapLengthInput, finalUserOutMap, player2, mapSymbol);
-                        compareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
+                        CompareTwoArr(finalUserOutMap, tempArray, player1, player2, userMapLengthInput);
                         killOponent(userMapLengthInput, finalUserOutMap, player1, player2, currentPlayer, mapSymbol, winningTotem);
 
                     }
                     Console.Clear();
-                    displayUserArr(finalUserOutMap, userMapLengthInput);
+                    DisplayUserMap(finalUserOutMap, userMapLengthInput);
                     currentPlayer = player1;
                     break;
 
@@ -193,7 +231,7 @@ namespace BeCarFast
 
 
         }
-        public static void fillArrWithBombs(int userMapLengthInput,String [,] tempArray,String trap)
+        public static String[,] FillMapWithBombs(int userMapLengthInput,String [,] tempArray,String trap)
         {
             Random r = new Random();
 
@@ -204,13 +242,14 @@ namespace BeCarFast
                     tempArray[trapIindex, trapJindex] = trap;
                    
                 }
+            return tempArray;
 
             
         }
-        public static void compareTwoArr(String [,] playerViewArray,String[,] tempArr,String player1, String player2,int userMapLengthInput)
+        public static void CompareTwoArr(String [,] playerViewArray,String[,] tempArr,String player1, String player2,int userMapLengthInput)
         {
           
-            String trap = "*";
+            String trap = " * ";
 
             for(int i =0; i <= userMapLengthInput-1; i++)
             {
@@ -219,18 +258,14 @@ namespace BeCarFast
                 {
                     if (tempArr[i, j] == trap && playerViewArray[i, j] == player1 )
                     {
-                        playerViewArray[i, j] = "*";
-                       
-                        Console.WriteLine("OH no its trap player 1 moving to start");
+                        playerViewArray[i, j] = trap;
                         playerViewArray[userMapLengthInput - 1, 0] = player1;
-
                         break;
                         
                     }
                     else if ( tempArr[i, j] == trap && playerViewArray[i, j] == player2)
                     {
-                        Console.WriteLine("OH no its trap player 2 moving to start");
-                        playerViewArray[i, j] = "*";
+                        playerViewArray[i, j] = trap;
                         playerViewArray[userMapLengthInput - 1, userMapLengthInput - 1] = player2 ;
                         break;
                     }
@@ -240,10 +275,11 @@ namespace BeCarFast
             }
            
         }
-        public static String[,] fillMap(String[,] temporarayTab, int mapLevels)
+        public static String[,] FillMap(String[,] temporaryArr, int mapLevels)
         {
+
             
-            String output = "[]";
+            String output = "[ ]";
 
             for (int i = 0; i <= mapLevels - 1; i++)
             {
@@ -253,7 +289,7 @@ namespace BeCarFast
 
                     // int maxIndex = "[3][3]";
 
-                    temporarayTab[i, j] = output;
+                    temporaryArr[i, j] = output;
 
                    
                 }
@@ -261,10 +297,10 @@ namespace BeCarFast
 
             }
 
-            return temporarayTab;
+            return temporaryArr;
         }
 
-        public static void displayUserArr(String[,] finalUserMap,int userMapLength)
+        public static void DisplayUserMap(String[,] finalUserMap,int userMapLength)
         {
 
 
@@ -286,10 +322,10 @@ namespace BeCarFast
 
         }
 
-        public static String[,] fillTemporaryMap(String[,] temporarayTab, int userMapLength)
+        public static String[,] FillTemporaryMap(String[,] temporarayTab, int userMapLength)
         {
 
-            String icon = "[]";
+            String icon = "[ ]";
 
             for (int i = 0; i <= userMapLength - 1; i++)
             {
@@ -311,14 +347,14 @@ namespace BeCarFast
         }
 
 
-        public static Boolean winCheck(String[,] finalUserOutMap,Boolean win,String winningTotem,String player1,String player2,int userMapLength)
+        public static Boolean WinCheck(String[,] finalUserOutMap,Boolean win,String winningTotem,String player1,String player2,int userMapLength)
         {
 
           
                     if (player1 == finalUserOutMap[0,userMapLength/2] || player2 == finalUserOutMap[0,userMapLength/2])
                     {
                         win = true;
-                        Console.WriteLine("Congrats u have won");
+                        Console.WriteLine("Congrats u have won "+player1 );
                         
                     }
               
@@ -327,7 +363,7 @@ namespace BeCarFast
             
             return win;
         }
-        public static String [,] addWinningTotemP1AndP2(String[,] finalUserOutMap,String symbol,int userInputMapLength,String p1,String p2)
+        public static String [,] AddWinningTotemP1P2(String[,] finalUserOutMap,String symbol,int userInputMapLength,String p1,String p2)
         {
             int a = 0;
             int b = userInputMapLength / 2;
@@ -337,7 +373,7 @@ namespace BeCarFast
             
         return finalUserOutMap;
         }
-        public static String [,] player1GoUp(int userMapLengthInput, String[,] finalUserOutMap, String player1, String mapSymbol)
+        public static String [,] Plauer1GoUp(int userMapLengthInput, String[,] finalUserOutMap, String player1, String mapSymbol)
         {
             for (int i = 0; i <= userMapLengthInput - 1; i++)
             {
@@ -347,7 +383,7 @@ namespace BeCarFast
                     {
                         if (i >0)
                         {
-                            
+                            // jesli mapa 3x3 to p1 jest w i=2 j=0
                             finalUserOutMap[i, j] = mapSymbol;
                             finalUserOutMap[i - 1, j] = player1;
                             break;
@@ -368,7 +404,7 @@ namespace BeCarFast
             return finalUserOutMap;
         }
 
-        public static String[,] player1GoDown(int userMapLengthInput, String[,] finalUserOutMap, String player1, String mapSymbol)
+        public static String[,] Player1GoDown(int userMapLengthInput, String[,] finalUserOutMap, String player1, String mapSymbol)
         {
             for (int i = 0; i <= userMapLengthInput - 1; i++)
             {
@@ -376,7 +412,7 @@ namespace BeCarFast
                 {
                     if (finalUserOutMap[i, j].Equals(player1))
                     {
-                        if (i<userMapLengthInput-1)
+                        if (i<userMapLengthInput-1) 
                         {
 
                             finalUserOutMap[i, j] = mapSymbol;
@@ -619,6 +655,28 @@ namespace BeCarFast
                     }
                 }
             }
+        }
+        public static String Draw(Random r,String currentPlayer,String player1,String player2)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Please wait, who is first draw.");
+
+                Thread.Sleep(3000);
+                Console.Clear();
+            }
+            int whichPlayerIsFirst = r.Next(0, 2);
+
+            if (whichPlayerIsFirst == 0)
+            {
+                currentPlayer = player1;
+            }
+            else
+            {
+                currentPlayer = player2;
+            }
+            Console.WriteLine(currentPlayer + " is first");
+            return currentPlayer;
         }
     }
 }
