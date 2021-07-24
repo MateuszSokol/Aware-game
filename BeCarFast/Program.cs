@@ -117,7 +117,7 @@ namespace BeCarFast
                 }
 
 
-                if (!KillOpponent(finalUserOutMap,userMapLengthInput,player2))
+                if (!KillOpponent1(finalUserOutMap,userMapLengthInput,player2))
                 {
                     for (int i = 0; i < userMapLengthInput-1; i++)
                     {
@@ -180,7 +180,7 @@ namespace BeCarFast
                        
 
                     }
-                    if (!KillOpponent(finalUserOutMap, userMapLengthInput, player1))
+                    if (!KillOpponent2(finalUserOutMap, userMapLengthInput, player1))
                     {
                         for (int i = 0; i <userMapLengthInput-1; i++)
                         {
@@ -409,7 +409,7 @@ namespace BeCarFast
             }
             return finalUserOutMap;
         }
-\        private static bool KillOpponent(string[,] finalUserArr, int userLengthInput, string player2)
+        private static bool KillOpponent1(string[,] finalUserArr, int userLengthInput, string player2)
         {  
 
             bool isContainingP1 = false;
@@ -427,7 +427,7 @@ namespace BeCarFast
 
 
         }
-        private static bool KillOpponent(string[,] finalUserArr,int userLengthInput, string player1)
+        private static bool KillOpponent2(string[,] finalUserArr,int userLengthInput, string player1)
         {
            
 
