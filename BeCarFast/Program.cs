@@ -27,7 +27,7 @@ namespace BeCarFast
             Thread.Sleep(2000);
             Console.Clear();
 
-            //P1 wybiera postac
+
             Console.WriteLine("Pick your Hero, P1");
 
             for (int i = 0; i < herosArr.Length; i++)
@@ -41,7 +41,6 @@ namespace BeCarFast
 
             player1 = herosArr[P1PickingHeroNumber - 1];
             herosArr[P1PickingHeroNumber - 1] = null;
-            //P2 wybiera postac
 
             Console.WriteLine("P1: " + player1 + "\n" + "P2 choosing: ");
 
@@ -66,17 +65,14 @@ namespace BeCarFast
             currentPlayer = Draw(r, currentPlayer, player1, player2);
             string[,] finalUserOutMap = new string[userMapLengthInput, userMapLengthInput];
             string[,] tempArray = new string[userMapLengthInput, userMapLengthInput];
-            FillMap(finalUserOutMap, userMapLengthInput); //fill with []
-            FillMapWithBombs(userMapLengthInput, tempArray, trap); // wypelnia plansze bombami (*)
-            AddWinningTotemP1P2(finalUserOutMap, winningTotem, userMapLengthInput, player1, player2); //dodaje graczy oraz wygrywajacy totem 
-            // 2621440 downArrow
-            //2424832 leftArrow
-            // 2555904 rightArrow
-            //2490368 upArrow    
+            FillMap(finalUserOutMap, userMapLengthInput); 
+            FillMapWithBombs(userMapLengthInput, tempArray, trap); 
+            AddWinningTotemP1P2(finalUserOutMap, winningTotem, userMapLengthInput, player1, player2); 
+       
             while (!win)
             {
                 DisplayUserMap(finalUserOutMap, userMapLengthInput);
-                //   IsKilled(finalUserOutMap, currentPlayer, userMapLengthInput, isKilled);
+         
                 while (currentPlayer == player1)
                 {
 
@@ -285,11 +281,6 @@ namespace BeCarFast
             finalUserOutMap[userInputMapLength - 1, userInputMapLength - 1] = p2;
             return finalUserOutMap;
         }
-        //   0 1 2
-        //0 [][][]
-        //1 [][][]
-        //2 [][][]
-        //aby dzialalo musimy przypisac ruchy do temporary tab i sprawdzac elementy tab
 
         public static String Draw(Random r, String currentPlayer, String player1, String player2)
         {
@@ -455,16 +446,3 @@ namespace BeCarFast
 
 }
     
-
-
-/* Console.WriteLine("Player 2 got killed hes moving to start");
-finalUserArr[userLengthInput - 1, userLengthInput - 1] = player2;
-finalUserArr[i, j] = mapSymbol;
-break; */
-
-/*
-    Console.WriteLine("Player 1 got killed hes moving to start");
-                        finalUserArr[userLengthInput-1, 0] = player1;
-                        finalUserArr[i, j] = mapSymbol;
-                        break;
- */
